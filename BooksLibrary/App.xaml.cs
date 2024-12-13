@@ -12,3 +12,4 @@ namespace BooksLibrary
 	}
 
 }
+dotnet ef dbcontext scaffold "server=localhost;database=bookslibrary;user=root;password=1234;" Pomelo.EntityFrameworkCore.MySql -o Models
