@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksLibrary.Models.DataBase
 {
-    public class ApplicationContext : DbContext
+    public class LibraryContext : DbContext
     {
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -20,10 +20,7 @@ namespace BooksLibrary.Models.DataBase
         public DbSet<Storage> Storage { get; set; }
         public DbSet<Student> Students { get; set; }
 
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
-           : base(options)
-        {
-        }
+      
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

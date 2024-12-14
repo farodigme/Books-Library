@@ -18,6 +18,7 @@ namespace BooksLibrary.Models.DataBase
 		public string? MiddleName { get; set; }
 
 		public Group? Group { get; set; }
+		[Column("group_id")]
 		public int GroupId { get; set; }
 
 	}

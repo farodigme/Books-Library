@@ -11,16 +11,18 @@ namespace BooksLibrary.Models.DataBase
 	{
 		public int Id { get; set; }
 		public Book? Book { get; set; }
+		[Column("book_id")]
 		public int BookId { get; set; }
 
 		public Student? Student { get; set; }
+		[Column("student_id")]
 		public int StudentId { get; set; }
 
 		[Column("rental_date")]
 		public DateTime RentalDate {  get; set; }
 
 		[Column("return_date")]
-		public DateTime ReturnDate { get; set; }
+		public DateTime? ReturnDate { get; set; }
 		[Column("returned")]
 		public bool isReturned { get; set; }
 	}
