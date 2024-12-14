@@ -9,6 +9,17 @@ namespace BooksLibrary.Models.DataBase
 {
     public class ApplicationContext : DbContext
     {
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Branch> Branches { get; set; }
+        public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
+        public DbSet<Speciality> Specialities { get; set; }
+        public DbSet<Storage> Storage { get; set; }
+        public DbSet<Student> Students { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
            : base(options)
         {
