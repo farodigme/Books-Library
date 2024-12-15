@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:BooksLibrary"
         mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
         Title="Информационная система библиотеки" Height="600" MinHeight="450" Width="1300" MinWidth="1000">
     <Grid>
-        <!-- TabControl для навигации -->
         <TabControl Margin="10">
-            <!-- Вкладка "Книги" -->
             <TabItem Header="Книги">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -17,17 +17,21 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Название книги"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchBookTitle, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Автор книги"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchBookAuthor, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Command="{Binding SearchForBookCommand}" Content="Поиск" Width="100"/>
-                        <Button Command="{Binding GetBookHistoryCommand}" CommandParameter="{Binding SelectedBook}" Margin="10,0,10,0" Content="История книги" Width="100"/>
+                        <TextBox Width="200" Margin="10,0,10,0" 
+                                 materialDesign:HintAssist.Hint="Название книги"
+                                 Text="{Binding SearchBookTitle, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                  materialDesign:HintAssist.Hint="Автор книги"
+                                 Text="{Binding SearchBookAuthor, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Command="{Binding SearchForBookCommand}"
+                                Content="Поиск" Width="100"/>
+                        <Button Command="{Binding GetBookHistoryCommand}"
+                                CommandParameter="{Binding SelectedBook}"
+                                Margin="10,0,10,0" Width="150"
+                                Content="История книги"/>
                     </StackPanel>
 
-                    <!-- Таблица с книгами -->
                     <DataGrid ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
@@ -43,7 +47,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Студенты" -->
             <TabItem Header="Студенты">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -51,16 +54,17 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Студент"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchStudent, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Группа"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchStudentGroup, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Content="Поиск" Width="100" Command="{Binding SearchForStudentOrGroup}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Студент"
+                                 Text="{Binding SearchStudent, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Группа"
+                                 Text="{Binding SearchStudentGroup, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="Поиск" Width="100"
+                                Command="{Binding SearchForStudentOrGroup}"/>
                     </StackPanel>
 
-                    <!-- Таблица со студентами -->
                     <DataGrid ItemsSource="{Binding Students}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" Width="*"/>
@@ -72,8 +76,6 @@
                 </Grid>
             </TabItem>
 
-
-            <!-- Вкладка "Группы" -->
             <TabItem Header="Группы">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -81,34 +83,31 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Название группы"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchGroup, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Название группы"
+                                 Text="{Binding SearchGroup, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <TextBlock Text="От даты"></TextBlock>
                         <DatePicker Width="150" Margin="10,0,10,0"
+                                     materialDesign:HintAssist.Hint="От даты"
                          SelectedDate="{Binding StartGroupDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
-                        <TextBlock Text="До даты"></TextBlock>
                         <DatePicker Width="150" Margin="10,0,10,0"
+                                      materialDesign:HintAssist.Hint="До даты"
                          SelectedDate="{Binding EndGroupDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
 
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForGroupOrDate}"/>
                     </StackPanel>
 
-                    <!-- Таблица с выдачами -->
                     <DataGrid ItemsSource="{Binding Groups}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*"/>
                             <DataGridTextColumn Header="Дата формирования" Binding="{Binding Created, StringFormat=dd.MM.yyyy}" Width="*"/>
                             <DataGridTextColumn Header="Специальность" Binding="{Binding Speciality.Name}" Width="Auto"/>
-
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Специальности" -->
             <TabItem Header="Специальности">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -116,10 +115,10 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Специальности"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchSpeciality, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                  materialDesign:HintAssist.Hint="Специальность"
+                                 Text="{Binding SearchSpeciality, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForSpeciality}"/>
                     </StackPanel>
 
@@ -135,7 +134,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Факультеты" -->
             <TabItem Header="Факультеты">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -143,14 +141,13 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Факультет"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchFaculty, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                  materialDesign:HintAssist.Hint="Факультет"
+                                 Text="{Binding SearchFaculty, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForFaculty}"/>
                     </StackPanel>
 
-                    <!-- Таблица с выдачами -->
                     <DataGrid ItemsSource="{Binding Faculties}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название факультета" Binding="{Binding Name}" Width="*"/>
@@ -160,7 +157,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Выдачи" -->
             <TabItem Header="Выдачи">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -168,39 +164,46 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <StackPanel Orientation="Vertical" Margin="10,0,0,10">
-                            <TextBlock Text="Студент"></TextBlock>
-                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding SearchRentalStudent, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Факультет"></TextBlock>
-                            <TextBox Width="200" Height="23" Margin="0,3,10,0" Text="{Binding SearchRentalFaculty, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Специальность"></TextBlock>
-                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding SearchRentalSpeciality, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <StackPanel Orientation="Vertical" Margin="2">
+                            <TextBox Width="200" Height="23" Margin="5"
+                                     materialDesign:HintAssist.Hint="Студент"
+                                     Text="{Binding SearchRentalStudent, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Width="200" Height="23" Margin="5"
+                                     materialDesign:HintAssist.Hint="Факультет"
+                                     Text="{Binding SearchRentalFaculty, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Width="200" Height="23" Margin="5"
+                                     materialDesign:HintAssist.Hint="Специальность"
+                                     Text="{Binding SearchRentalSpeciality, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="10,0,0,10">
-                            <TextBlock Text="От даты выдачи"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
-                            <TextBlock Text="До даты выдачи"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
+                        <StackPanel Orientation="Vertical" Margin="2">
+                            <DatePicker Width="150" Margin="5"
+                                        materialDesign:HintAssist.Hint="От даты выдачи"
+                                        SelectedDate="{Binding StartRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
+                            <DatePicker Width="150" Margin="5"
+                                        materialDesign:HintAssist.Hint="До даты выдачи"
+                                        SelectedDate="{Binding EndRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="10,0,0,10">
-                            <TextBlock Text="От даты возврата"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
-                            <TextBlock Text="До даты возврата"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
+                        <StackPanel Orientation="Vertical" Margin="2">
+                            <DatePicker Width="150" Margin="5"
+                                        materialDesign:HintAssist.Hint="От даты возврата"
+                                        SelectedDate="{Binding StartReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
+                            <DatePicker Width="150" Margin="5"
+                                        materialDesign:HintAssist.Hint="До даты возврата"
+                                        SelectedDate="{Binding EndReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical" Margin="10,10,0,10">
-                            <CheckBox Content="Возвращено" IsChecked="{Binding CheckReturn, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,10,0"></CheckBox>
-                            <TextBlock Text="Книг на руках" Margin="0,7,10,0"></TextBlock>
-                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding BooksOnHandsCount, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Button Content="Поиск" Height="23" Margin="0,19,10,0" Command="{Binding SearchForRental}" />
+                        <StackPanel Orientation="Vertical" Margin="2">
+                            <CheckBox Content="Возвращено" IsChecked="{Binding CheckReturn, UpdateSourceTrigger=PropertyChanged}" Margin="5"></CheckBox>
+                            <TextBox Width="200" Height="23"
+                                     materialDesign:HintAssist.Hint="Книг на руках"
+                                     Margin="10,15,0,0" Text="{Binding BooksOnHandsCount, UpdateSourceTrigger=PropertyChanged}"/>
+                            
                         </StackPanel>
+                        <Button Content="Поиск" Width="100" Margin="10" Command="{Binding SearchForRental}" />
                     </StackPanel>
 
-                    <!-- Таблица с выдачами -->
                     <DataGrid ItemsSource="{Binding Rentals}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
@@ -216,7 +219,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Наличие" -->
             <TabItem Header="Наличие">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -224,18 +226,19 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="Название книги"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchBookStorage, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Наименование зала"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchBranchStorage, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Местонахождение"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchLocationStorage, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Название книги"
+                                 Text="{Binding SearchBookStorage, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Наименование зала"
+                                 Text="{Binding SearchBranchStorage, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="200" Margin="10,0,10,0"
+                                 materialDesign:HintAssist.Hint="Местонахождение"
+                                 Text="{Binding SearchLocationStorage, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForStorageCommand}"/>
                     </StackPanel>
 
-                    <!-- Таблица с выдачами -->
                     <DataGrid ItemsSource="{Binding Storage}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
@@ -246,33 +249,6 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-
-            <!-- Вкладка "Задолжники" --><!--
-            <TabItem Header="Задолжники">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    --><!-- Панель фильтров --><!--
-                    <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
-                        <TextBlock Text="Книг на руках" Margin="10,0,0,10"></TextBlock>
-                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding s, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Content="Поиск" Width="100" Margin="10,0,0,10" Command="{Binding }"/>
-                    </StackPanel>
-
-                    --><!-- Таблица с выдачами --><!--
-                    <DataGrid ItemsSource="{Binding Storage}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
-                            <DataGridTextColumn Header="Наименование зала" Binding="{Binding Branch.Name}" Width="*"/>
-                            <DataGridTextColumn Header="Местонахождение" Binding="{Binding Branch.Location}" Width="*"/>
-                            <DataGridTextColumn Header="Количество" Binding="{Binding Count}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>-->
         </TabControl>
     </Grid>
 </Window>

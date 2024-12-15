@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BooksLibrary.Views"
         mc:Ignorable="d"
-        Title="BookWindow" Height="350" Width="800">
+        Title="BookWindow" Height="450" Width="1200">
     
     <Grid Margin="10">
         <DataGrid ItemsSource="{Binding Rentals}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
