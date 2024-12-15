@@ -1,6 +1,9 @@
 ﻿using BooksLibrary.Models.DataBase;
+using BooksLibrary.ViewModels;
+
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +21,12 @@ namespace BooksLibrary.Views
 	/// <summary>
 	/// Логика взаимодействия для BookWindow.xaml
 	/// </summary>
-	public partial class BookWindow : Window
+	public partial class BookHistoryWindow : Window
 	{
-		public Book Book { get; private set; }
-		public BookWindow(Book book)
+		public BookHistoryWindow(IEnumerable<Rental> rentals)
 		{
-			InitializeComponent();
-			Book = book;
-			this.DataContext = Book;
+			InitializeComponent();		
+			this.DataContext = new BookHistoryViewModel(new ObservableCollection<Rental>(rentals));
 		}
 		private void Accept_Click(object sender, RoutedEventArgs e)
 		{

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BooksLibrary.ViewModels
@@ -224,6 +225,50 @@ namespace BooksLibrary.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
+		private string _searchRentalFaculty;
+		public string SearchRentalFaculty
+		{
+			get => _searchRentalFaculty;
+			set
+			{
+				_searchRentalFaculty = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string _searchRentalSpeciality;
+		public string SearchRentalSpeciality
+		{
+			get => _searchRentalSpeciality;
+			set
+			{
+				_searchRentalSpeciality = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _checkReturn;
+		public bool CheckReturn
+		{
+			get => _checkReturn;
+			set
+			{
+				_checkReturn = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private int _booksOnHandsCount;
+		public int BooksOnHandsCount
+		{
+			get => _booksOnHandsCount;
+			set
+			{
+				_booksOnHandsCount = Convert.ToInt32(value);
+				OnPropertyChanged();
+			}
+		}
 		public MainViewModel()
 		{
 			_context = new LibraryContext();
@@ -290,7 +335,7 @@ namespace BooksLibrary.ViewModels
 					  }
 					  if (!string.IsNullOrWhiteSpace(SearchStudentGroup))
 					  {
-						  students = students.Where(s => s.Group.Name.Contains(SearchGroup));
+						  students = students.Where(s => s.Group.Name.Contains(SearchStudentGroup));
 					  }
 
 					  // Очищаем и добавляем отфильтрованные данные
@@ -403,6 +448,16 @@ namespace BooksLibrary.ViewModels
 													s.Student.MiddleName.Contains(SearchRentalStudent));
 					  }
 
+					  if (!string.IsNullOrWhiteSpace(SearchRentalFaculty))
+					  {
+						  rentals = rentals.Where(s => s.Student.Group.Speciality.Faculty.Name.Contains(SearchRentalFaculty) || s.Student.Group.Speciality.Faculty.Abbreviation.Contains(SearchRentalFaculty));
+					  }
+
+					  if (!string.IsNullOrWhiteSpace(SearchRentalSpeciality))
+					  {
+						  rentals = rentals.Where(s => s.Student.Group.Speciality.Name.Contains(SearchRentalSpeciality) || s.Student.Group.Speciality.Abbreviation.Contains(SearchRentalSpeciality));
+					  }
+
 					  if (StartRentalDate.HasValue && EndRentalDate.HasValue)
 					  {
 						  rentals = rentals.Where(s => s.RentalDate >= StartRentalDate.Value && s.RentalDate <= EndRentalDate.Value);
@@ -412,8 +467,19 @@ namespace BooksLibrary.ViewModels
 					  {
 						  rentals = rentals.Where(s => s.ReturnDate >= StartReturnDate.Value && s.ReturnDate <= EndReturnDate.Value);
 					  }
+					  if (CheckReturn)
+					  {
+						  rentals = rentals.Where(s => s.isReturned);
+					  }
+					  if (BooksOnHandsCount > 0)
+					  {
+						  rentals = rentals
+						 .Where(r => !r.isReturned)
+						 .GroupBy(r => r.Student)
+						 .Where(g => g.Count() >= BooksOnHandsCount)
+						 .SelectMany(g => g);
+					  }
 
-					  // Очищаем и добавляем отфильтрованные данные
 					  Rentals.Clear();
 					  foreach (var rental in rentals)
 					  {
@@ -454,8 +520,8 @@ namespace BooksLibrary.ViewModels
 				  (_searchForStorageCommand = new RelayCommand((o) =>
 				  {
 					  IEnumerable<Storage> storage = _context.Storage
-				       .Include(b => b.Book)
-				       .Include(b => b.Branch);
+					   .Include(b => b.Book)
+					   .Include(b => b.Branch);
 
 					  if (!string.IsNullOrWhiteSpace(SearchBookStorage))
 					  {
@@ -589,45 +655,31 @@ namespace BooksLibrary.ViewModels
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		//private RelayCommand? _editBookCommand;
+		private RelayCommand? _getBookHistory;
 
-		//public RelayCommand EditBookCommand
-		//{
-		//	get
-		//	{
-		//		return _editBookCommand ??
-		//		  (_editBookCommand = new RelayCommand((selectedItem) =>
-		//		  {
+		public RelayCommand GetBookHistoryCommand
+		{
+			get
+			{
+				return _getBookHistory ??= new RelayCommand((selectedItem) =>
+				{
+					// Приведение выбранного элемента к типу Book
+					Book? book = selectedItem as Book;
+					if (book == null) return;
 
-		//			  Book? book = selectedItem as Book;
-		//			  if (book == null) return;
+					// Запрос истории книги
+					var bookHistory = _context.Rentals
+						.Where(r => r.BookId == book.Id) // Фильтр по книге через Book.Id
+						.OrderByDescending(r => r.RentalDate) // Сортировка по дате выдачи
+						.Select(r => r)
+						.ToList();
 
-		//			  Book vm = new Book
-		//			  {
-		//				  Title = book.Title,
-		//				  Author = book.Author,
-		//				  Publisher = book.Publisher,
-		//				  Year = book.Year,
-		//				  Pages = book.Pages,
-		//				  Illustrations = book.Illustrations,
-		//				  Price = book.Price,
-		//			  };
-		//			  BookWindow userWindow = new BookWindow(vm);
+					// Открытие окна истории книги
+					BookHistoryWindow userWindow = new BookHistoryWindow(bookHistory); // Передаём историю книги в окно
+					userWindow.ShowDialog();
+				});
+			}
+		}
 
-		//			  if (userWindow.ShowDialog() == true)
-		//			  {
-		//				  book.Title = userWindow.Book.Title;
-		//				  book.Author = userWindow.Book.Author;
-		//				  book.Publisher = userWindow.Book.Publisher;
-		//				  book.Year = userWindow.Book.Year;
-		//				  book.Pages = userWindow.Book.Pages;
-		//				  book.Illustrations = userWindow.Book.Illustrations;
-		//				  book.Price = userWindow.Book.Price;
-		//				  _context.Entry(book).State = EntityState.Modified;
-		//				  _context.SaveChanges();
-		//			  }
-		//		  }));
-		//	}
-		//}
 	}
 }

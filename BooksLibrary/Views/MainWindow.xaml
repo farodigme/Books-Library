@@ -24,9 +24,7 @@
                         <TextBlock Text="Автор книги"></TextBlock>
                         <TextBox Width="200" Margin="10,0,10,0" Text="{Binding SearchBookAuthor, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Command="{Binding SearchForBookCommand}" Content="Поиск" Width="100"/>
-                        <!--<Button Command="{Binding AddBookCommand}" Content="Добавить книгу" Width="100"/>
-                        <Button Command="{Binding EditBookCommand}" CommandParameter="{Binding SelectedBook}" Content="Редактировать книгу" Width="100"/>
-                        <Button Content="Удалить книгу" Width="100"/>-->
+                        <Button Command="{Binding GetBookHistoryCommand}" CommandParameter="{Binding SelectedBook}" Margin="10,0,10,0" Content="История книги" Width="100"/>
                     </StackPanel>
 
                     <!-- Таблица с книгами -->
@@ -90,10 +88,10 @@
 
                         <TextBlock Text="От даты"></TextBlock>
                         <DatePicker Width="150" Margin="10,0,10,0"
-                         SelectedDate="{Binding StartGroupDate, UpdateSourceTrigger=PropertyChanged}"/>
+                         SelectedDate="{Binding StartGroupDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                         <TextBlock Text="До даты"></TextBlock>
                         <DatePicker Width="150" Margin="10,0,10,0"
-                         SelectedDate="{Binding EndGroupDate, UpdateSourceTrigger=PropertyChanged}"/>
+                         SelectedDate="{Binding EndGroupDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
 
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForGroupOrDate}"/>
                     </StackPanel>
@@ -102,7 +100,7 @@
                     <DataGrid ItemsSource="{Binding Groups}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*"/>
-                            <DataGridTextColumn Header="Дата формирования" Binding="{Binding Created}" Width="*"/>
+                            <DataGridTextColumn Header="Дата формирования" Binding="{Binding Created, StringFormat=dd.MM.yyyy}" Width="*"/>
                             <DataGridTextColumn Header="Специальность" Binding="{Binding Speciality.Name}" Width="Auto"/>
 
                         </DataGrid.Columns>
@@ -174,25 +172,31 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <StackPanel Orientation="Vertical" Margin="10,0,0,10">
                             <TextBlock Text="Студент"></TextBlock>
-                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding SearchRentalStudent}"/>
+                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding SearchRentalStudent, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Факультет"></TextBlock>
+                            <TextBox Width="200" Height="23" Margin="0,3,10,0" Text="{Binding SearchRentalFaculty, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Специальность"></TextBlock>
+                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding SearchRentalSpeciality, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin="10,0,0,10">
                             <TextBlock Text="От даты выдачи"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartRentalDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                             <TextBlock Text="До даты выдачи"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndRentalDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndRentalDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin="10,0,0,10">
                             <TextBlock Text="От даты возврата"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartReturnDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding StartReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                             <TextBlock Text="До даты возврата"></TextBlock>
-                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndReturnDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker Width="150" Margin="0,2,10,0" SelectedDate="{Binding EndReturnDate, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical">
-                            <Button Content="Поиск" Width="150" Height="30" Margin="10,14,0,10" Command="{Binding SearchForRental}" />
-                            <Button Content="Показать задолжников" Width="150" Height="30" Margin="10,0,0,10" Command="{Binding SearchDebtor}"/>
+                        <StackPanel Orientation="Vertical" Margin="10,10,0,10">
+                            <CheckBox Content="Возвращено" IsChecked="{Binding CheckReturn, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,10,0"></CheckBox>
+                            <TextBlock Text="Книг на руках" Margin="0,7,10,0"></TextBlock>
+                            <TextBox Width="200" Height="23" Margin="0,2,10,0" Text="{Binding BooksOnHandsCount, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="Поиск" Height="23" Margin="0,19,10,0" Command="{Binding SearchForRental}" />
                         </StackPanel>
                     </StackPanel>
 
@@ -202,9 +206,11 @@
                             <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
                             <DataGridTextColumn Header="Фамилия студента" Binding="{Binding Student.LastName}" Width="*"/>
                             <DataGridTextColumn Header="Имя студента" Binding="{Binding Student.FirstName}" Width="*"/>
-                            <DataGridTextColumn Header="Дата выдачи" Binding="{Binding RentalDate}" Width="Auto"/>
-                            <DataGridTextColumn Header="Дата возврата" Binding="{Binding ReturnDate}" Width="Auto"/>
-                            <DataGridCheckBoxColumn  Header="Возвращено" Binding="{Binding isReturned}" Width="*"/>
+                            <DataGridTextColumn Header="Факультет" Binding="{Binding Student.Group.Speciality.Faculty.Name}" Width="*"/>
+                            <DataGridTextColumn Header="Специальность" Binding="{Binding Student.Group.Speciality.Name}" Width="*"/>
+                            <DataGridTextColumn Header="Дата выдачи" Binding="{Binding RentalDate, StringFormat=dd.MM.yyyy}" Width="Auto"/>
+                            <DataGridTextColumn Header="Дата возврата" Binding="{Binding ReturnDate, StringFormat=dd.MM.yyyy}" Width="Auto"/>
+                            <DataGridCheckBoxColumn  Header="Возвращено" Binding="{Binding isReturned}" Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -241,26 +247,22 @@
                 </Grid>
             </TabItem>
 
-            <!-- Вкладка "Отчеты" -->
-            <TabItem Header="Отчеты">
+            <!-- Вкладка "Задолжники" --><!--
+            <TabItem Header="Задолжники">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров -->
+                    --><!-- Панель фильтров --><!--
                     <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
-                        <TextBlock Text="Вид отчета" Margin="10,0,0,10"></TextBlock>
-                        <ComboBox Width="150" Margin="10,0,0,10">
-                            <ComboBoxItem>1</ComboBoxItem>
-                            <ComboBoxItem>2</ComboBoxItem>
-                            <ComboBoxItem>3</ComboBoxItem>
-                        </ComboBox>
-                        <Button Content="Сформировать" Width="100" Margin="10,0,0,10" Command="{Binding SearchForStorageCommand}"/>
+                        <TextBlock Text="Книг на руках" Margin="10,0,0,10"></TextBlock>
+                        <TextBox Width="200" Margin="10,0,10,0" Text="{Binding s, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="Поиск" Width="100" Margin="10,0,0,10" Command="{Binding }"/>
                     </StackPanel>
 
-                    <!-- Таблица с выдачами -->
+                    --><!-- Таблица с выдачами --><!--
                     <DataGrid ItemsSource="{Binding Storage}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
@@ -270,7 +272,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
 </Window>
