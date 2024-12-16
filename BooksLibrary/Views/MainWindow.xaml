@@ -199,9 +199,13 @@
                             <TextBox Width="200" Height="23"
                                      materialDesign:HintAssist.Hint="Книг на руках"
                                      Margin="10,15,0,0" Text="{Binding BooksOnHandsCount, UpdateSourceTrigger=PropertyChanged}"/>
-                            
+
                         </StackPanel>
                         <Button Content="Поиск" Width="100" Margin="10" Command="{Binding SearchForRental}" />
+                        <Button Command="{Binding CreateReportCommand}"
+                                CommandParameter="Rentals"
+                                Margin="10,0,10,0" Width="200"
+                                Content="Сформировать отчет"/>
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding Rentals}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
@@ -237,6 +241,10 @@
                                  materialDesign:HintAssist.Hint="Местонахождение"
                                  Text="{Binding SearchLocationStorage, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="Поиск" Width="100" Command="{Binding SearchForStorageCommand}"/>
+                        <Button Command="{Binding CreateReportCommand}"
+                                CommandParameter="Storage"
+                                Margin="10,0,10,0" Width="200"
+                                Content="Сформировать отчет"/>
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding Storage}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">

@@ -6,8 +6,18 @@
         xmlns:local="clr-namespace:BooksLibrary.Views"
         mc:Ignorable="d"
         Title="BookWindow" Height="450" Width="1200">
-    
+
     <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <Button Command="{Binding CreateReportCommand}"
+                        Margin="10,0,10,0" Width="200"
+                        Content="Сформировать отчет"/>
+        </StackPanel>
         <DataGrid ItemsSource="{Binding Rentals}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название книги" Binding="{Binding Book.Title}" Width="*"/>
